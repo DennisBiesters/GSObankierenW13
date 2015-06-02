@@ -48,7 +48,7 @@ public class Bank implements IBank {
 		return accounts.get(nr);
 	}
 
-	public boolean maakOver(int source, int destination, Money money)
+	public synchronized boolean maakOver(int source, int destination, Money money)
 			throws NumberDoesntExistException {
 		if (source == destination)
 			throw new RuntimeException(
