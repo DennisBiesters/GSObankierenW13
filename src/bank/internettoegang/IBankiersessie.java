@@ -37,10 +37,6 @@ public interface IBankiersessie extends Remote {
 			throws NumberDoesntExistException, InvalidSessionException,
 			RemoteException;
 
-	/**
-	 * sessie wordt beeindigd
-	 */
-	void logUit() throws RemoteException;
 
 	/**
 	 * @return de rekeninggegevens die horen bij deze sessie
@@ -49,4 +45,10 @@ public interface IBankiersessie extends Remote {
 	 * @throws RemoteException
 	 */
 	IRekening getRekening() throws InvalidSessionException, RemoteException;
+        
+        /**
+	 * sessie wordt beeindigd
+	 */
+	void logUit() throws RemoteException;
+        
 }
