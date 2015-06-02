@@ -70,12 +70,20 @@ public class BankTest {
         Integer bestemming = bank.openRekening("Fred", "America");
 
         // true tests
-        assertTrue(bank.maakOver(bron, bestemming, new Money(1, Money.EURO)));
+        assertTrue(bank.maakOver(bron, bestemming, new Money(100, Money.EURO)));
+        
+        // check if saldos are changed
+        assertEquals("-1,00", bank.getRekening(bron).getSaldo().getValue());
+        assertEquals("1,00", bank.getRekening(bestemming).getSaldo().getValue());
         
         // false tests
         assertFalse(bank.maakOver(bron, bestemming, new Money(1000000, Money.EURO)));       
         
-        // fail test
+        // check if saldos aren't changed
+        assertEquals("-1,00", bank.getRekening(bron).getSaldo().getValue());
+        assertEquals("1,00", bank.getRekening(bestemming).getSaldo().getValue());
+        
+        // fail test if input is incorrect
         try {
             bank.maakOver(bron, bron, new Money(1, Money.EURO));
             fail("money transferred to your own account");
@@ -91,6 +99,12 @@ public class BankTest {
         try {
             bank.maakOver(1, bestemming, new Money(1, Money.EURO));
             fail("money transferred from not existing source");
+        } catch (NumberDoesntExistException exc) {
+        }
+        
+        try {
+            bank.maakOver(bron, 1, new Money(1, Money.EURO));
+            fail("money transferred from not existing destination");
         } catch (NumberDoesntExistException exc) {
         }
     }

@@ -1,5 +1,7 @@
 package bank.bankieren;
 
+import fontys.observer.BasicPublisher;
+import fontys.observer.RemotePropertyListener;
 import fontys.util.*;
 
 import java.rmi.RemoteException;
@@ -15,13 +17,15 @@ public class Bank implements IBank {
 	private Collection<IKlant> clients;
 	private int nieuwReknr;
 	private String name;
+        private BasicPublisher pub;
 
 	public Bank(String name) {
 		accounts = new HashMap<Integer,IRekeningTbvBank>();
 		clients = new ArrayList<IKlant>();
 		nieuwReknr = 100000000;	
-		this.name = name;	
-	}
+		this.name = name;
+                this.pub = new BasicPublisher(new String[]{"banksaldo"});
+        }
 
 	public int openRekening(String name, String city) {
 		if (name.equals("") || city.equals(""))
@@ -63,6 +67,8 @@ public class Bank implements IBank {
 
 		Money negative = Money.difference(new Money(0, money.getCurrency()),
 				money);
+                
+                Money oldSaldo = source_account.getSaldo();
 		boolean success = source_account.muteer(negative);
 		if (!success)
 			return false;
@@ -75,6 +81,9 @@ public class Bank implements IBank {
 
 		if (!success) // rollback
 			source_account.muteer(money);
+                else
+                    pub.inform(this, "banksaldo", oldSaldo.toString(), source_account.getSaldo().toString());
+                    
 		return success;
 	}
 
@@ -82,5 +91,15 @@ public class Bank implements IBank {
 	public String getName() {
 		return name;
 	}
+
+    @Override
+    public void addListener(RemotePropertyListener rl, String string) throws RemoteException {
+        pub.addListener(rl, string);
+    }
+
+    @Override
+    public void removeListener(RemotePropertyListener rl, String string) throws RemoteException {
+        pub.removeListener(rl, string);
+    }
 
 }

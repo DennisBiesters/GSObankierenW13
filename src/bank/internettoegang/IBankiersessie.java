@@ -4,10 +4,11 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 import bank.bankieren.IRekening;
 import bank.bankieren.Money;
+import fontys.observer.RemotePublisher;
 import fontys.util.InvalidSessionException;
 import fontys.util.NumberDoesntExistException;
 
-public interface IBankiersessie extends Remote {
+public interface IBankiersessie extends Remote, RemotePublisher {
 	
 	long GELDIGHEIDSDUUR = 600000; 
 	/**
