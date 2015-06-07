@@ -54,6 +54,7 @@
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
                         <Label text="Overmaken:">
@@ -66,18 +67,20 @@
                               <Insets top="10.0" />
                            </padding>
                         </Label>
-                        <Label text="Tegenrekening" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <Label text="Tegenrekening" GridPane.rowIndex="3">
                            <padding>
                               <Insets top="10.0" />
                            </padding>
                         </Label>
-                        <TextField fx:id="tfAmount" GridPane.rowIndex="2" />
-                        <TextField fx:id="tfToAccountNr" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <TextField fx:id="tfAmount" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <TextField fx:id="tfToAccountNr" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                         <Button fx:id="btTransfer" mnemonicParsing="false" onAction="#transfer" prefHeight="50.0" prefWidth="200.0" text="Maak over" GridPane.columnIndex="2" GridPane.rowIndex="2">
                            <font>
                               <Font size="20.0" />
                            </font>
                         </Button>
+                        <Label text="Bank" GridPane.rowIndex="2" />
+                        <ComboBox fx:id="cbSelectBank" prefHeight="26.0" prefWidth="224.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                      </children>
                   </GridPane>
                </children>

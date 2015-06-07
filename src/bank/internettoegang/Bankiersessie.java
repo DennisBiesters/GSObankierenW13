@@ -35,7 +35,7 @@ public class Bankiersessie extends UnicastRemoteObject implements
     }
 
     @Override
-    public boolean maakOver(int bestemming, Money bedrag)
+    public boolean maakOver(String bestemmingBank, int bestemming, Money bedrag)
             throws NumberDoesntExistException, InvalidSessionException,
             RemoteException {
 
@@ -48,8 +48,11 @@ public class Bankiersessie extends UnicastRemoteObject implements
         if (!bedrag.isPositive()) {
             throw new RuntimeException("amount must be positive");
         }
+        if(bestemmingBank.equals("")){
+            throw new RuntimeException("destination bank may not be empty");
+        }
 
-        return bank.maakOver(reknr, bestemming, bedrag);
+        return bank.maakOver(reknr, bestemmingBank, bestemming, bedrag);
     }
 
     private void updateLaatsteAanroep() throws InvalidSessionException {

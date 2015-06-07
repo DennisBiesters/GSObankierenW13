@@ -23,7 +23,8 @@ public interface IBankiersessie extends Remote, RemotePublisher {
 	 * er wordt bedrag overgemaakt van de bankrekening met het nummer bron naar
 	 * de bankrekening met nummer bestemming
 	 * 
-	 * @param bron
+         * @param bestemmingBank 
+         *            mag niet leeg of null zijn
 	 * @param bestemming
 	 *            is ongelijk aan rekeningnummer van deze bankiersessie
 	 * @param bedrag
@@ -34,7 +35,7 @@ public interface IBankiersessie extends Remote, RemotePublisher {
 	 * @throws InvalidSessionException
 	 *             als sessie niet meer geldig is 
 	 */
-	boolean maakOver(int bestemming, Money bedrag)
+	boolean maakOver(String bestemmingBank, int bestemming, Money bedrag)
 			throws NumberDoesntExistException, InvalidSessionException,
 			RemoteException;
 

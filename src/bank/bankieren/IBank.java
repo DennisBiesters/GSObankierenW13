@@ -30,6 +30,8 @@ public interface IBank extends RemotePublisher {
      * rekening 
      * 
      * @param bron
+     * @param bestemmingBank
+     *            mag niet leeg of null zijn
      * @param bestemming
      *            ongelijk aan bron
      * @param bedrag
@@ -38,7 +40,7 @@ public interface IBank extends RemotePublisher {
      * @throws NumberDoesntExistException
      *             als een van de twee bankrekeningnummers onbekend is
      */
-    boolean maakOver(int bron, int bestemming, Money bedrag)
+    boolean maakOver(int bron, String bestemmingBank, int bestemming, Money bedrag)
             throws NumberDoesntExistException;
 
     /**
