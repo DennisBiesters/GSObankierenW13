@@ -110,12 +110,12 @@ public class BankierSessieController implements Initializable {
                 taMessage.setText("can't transfer money to your own account");
             }
 
-            String toBank = cbSelectBank.getSelectionModel().getSelectedItem().toString();
-            if (toBank.equals("")) {
-                taMessage.setText("please select a bank");
-            } else {
+            try {
+                String toBank = cbSelectBank.getSelectionModel().getSelectedItem().toString();
                 long centen = (long) (Double.parseDouble(tfAmount.getText()) * 100);
                 sessie.maakOver(toBank, to, new Money(centen, Money.EURO));
+            } catch (NullPointerException exc) {
+                taMessage.setText("please select a bank");
             }
         } catch (RemoteException e1) {
             e1.printStackTrace();
