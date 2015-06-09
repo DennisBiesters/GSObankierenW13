@@ -13,5 +13,12 @@ import java.rmi.Remote;
  * @author Dennis
  */
 public interface ICentraleBank extends Remote{
+    /**
+     * 
+     * @param destinationBank the bank the destionation rekening belongs to
+     * @param destination the rekening the money has to go to
+     * @param money the amount of money that has to be transfered
+     * @return 
+     */
     public boolean maakOver(String destinationBank, int destination, Money money);
 }
