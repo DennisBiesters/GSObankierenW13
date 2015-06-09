@@ -68,6 +68,7 @@ class Rekening implements IRekeningTbvBank {
 
         if (isTransferPossible(bedrag)) {
             saldo = Money.sum(saldo, bedrag);
+            System.out.println(eigenaar.getNaam() + " te " + eigenaar.getPlaats() + ": " + nr + " saldo: " + saldo);
             return true;
         }
         return false;

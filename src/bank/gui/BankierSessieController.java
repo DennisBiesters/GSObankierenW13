@@ -106,9 +106,9 @@ public class BankierSessieController implements Initializable {
         try {
             int from = Integer.parseInt(tfAccountNr.getText());
             int to = Integer.parseInt(tfToAccountNr.getText());
-            if (from == to) {
-                taMessage.setText("can't transfer money to your own account");
-            }
+//            if (from == to) {
+//                taMessage.setText("can't transfer money to your own account");
+//            }
 
             try {
                 String toBank = cbSelectBank.getSelectionModel().getSelectedItem().toString();

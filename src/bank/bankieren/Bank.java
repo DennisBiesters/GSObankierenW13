@@ -1,23 +1,31 @@
 package bank.bankieren;
 
+import bank.centrale.ICentraleBank;
 import fontys.observer.BasicPublisher;
 import fontys.observer.RemotePropertyListener;
 import fontys.util.*;
+import java.io.Serializable;
+import java.net.UnknownHostException;
+import java.rmi.NotBoundException;
 
 import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-public class Bank implements IBank {
+public class Bank implements IBank, Serializable{
 
     /**
      *
      */
-    private static final long serialVersionUID = -8728841131739353765L;
+    private transient static final long serialVersionUID = -8728841131739353765L;
     private Map<Integer, IRekeningTbvBank> accounts;
-    private Collection<IKlant> clients;
-    private int nieuwReknr;
+    private transient Collection<IKlant> clients;
+    private transient int nieuwReknr;
     private String name;
-    private BasicPublisher pub;
+    private transient BasicPublisher pub;
 
     public Bank(String name) {
         accounts = new HashMap<Integer, IRekeningTbvBank>();
@@ -56,7 +64,7 @@ public class Bank implements IBank {
 
     public synchronized boolean maakOver(int source, String destinationBank, int destination, Money money)
             throws NumberDoesntExistException {
-        if (source == destination) {
+        if (source == destination && this.name.equals(destinationBank)) {
             throw new RuntimeException(
                     "cannot transfer money to your own account");
         }
@@ -83,14 +91,26 @@ public class Bank implements IBank {
 
         if (this.name.equals(destinationBank)) {
             dest_account = (IRekeningTbvBank) getRekening(destination);
+
+            if (dest_account == null) {
+                throw new NumberDoesntExistException("account " + destination
+                        + " unknown at " + name);
+            }
+
+            success = dest_account.muteer(money);
         } else {
             //centrale bank: bank opzoeken, rekening opzoeken, muteer
+            String address;
+            try {
+                address = java.net.InetAddress.getLocalHost().getHostAddress();
+                Registry registry = LocateRegistry.getRegistry(address, 1097);
+                ICentraleBank cb = (ICentraleBank) registry.lookup("cb");
+                success = cb.maakOver(destinationBank, destination, money);
+            } catch (UnknownHostException | RemoteException | NotBoundException ex) {
+                Logger.getLogger(Bank.class.getName()).log(Level.SEVERE, null, ex);
+                success = false;
+            }
         }
-        if (dest_account == null) {
-            throw new NumberDoesntExistException("account " + destination
-                    + " unknown at " + name);
-        }
-        success = dest_account.muteer(money);
 
         if (!success) // rollback
         {

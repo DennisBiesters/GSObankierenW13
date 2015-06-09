@@ -62,12 +62,12 @@
                               <Font size="20.0" />
                            </font>
                         </Label>
-                        <Label prefHeight="30.0" prefWidth="44.0" text="Bedrag" GridPane.rowIndex="1">
+                        <Label prefHeight="31.0" prefWidth="63.0" text="Bedrag" GridPane.rowIndex="1">
                            <padding>
                               <Insets top="10.0" />
                            </padding>
                         </Label>
-                        <Label text="Tegenrekening" GridPane.rowIndex="3">
+                        <Label prefHeight="11.0" prefWidth="99.0" text="Tegenrekening" GridPane.rowIndex="3">
                            <padding>
                               <Insets top="10.0" />
                            </padding>

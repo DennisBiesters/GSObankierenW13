@@ -41,7 +41,7 @@ public class Bankiersessie extends UnicastRemoteObject implements
 
         updateLaatsteAanroep();
 
-        if (reknr == bestemming) {
+        if (reknr == bestemming && bank.getName().equals(bestemmingBank)) {
             throw new RuntimeException(
                     "source and destination must be different");
         }
