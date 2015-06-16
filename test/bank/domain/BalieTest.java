@@ -25,11 +25,8 @@ public class BalieTest {
         //setup
         Bank testBank = new Bank("Rabobank");
         Balie testBalie = new Balie(testBank);
-
-        //normal tests
-        assertEquals(100000000, testBalie.openRekening("Rick", "Eindhoven", "Password"));
-        assertEquals(100000001, testBalie.openRekening("Dennis", "Geldrop", "Password"));
-
+        testBalie.openRekening("Rick", "Eindhoven", "Password");
+        
         //fail tests
         assertNull(testBalie.openRekening("Rick", "", ""));
         assertNull(testBalie.openRekening("", "Eindhoven", ""));
@@ -43,16 +40,16 @@ public class BalieTest {
         //setup
         Bank testBank = new Bank("Rabobank");
         Balie testBalie = new Balie(testBank);
-        IBankiersessie sessie = new Bankiersessie(100000000, testBank);
-        testBalie.openRekening("Rick", "Eindhoven", "Password");
+        String username = testBalie.openRekening("Rick", "Eindhoven", "Password");
+        
         
         //normal tests
-        assertEquals(sessie, testBalie.logIn("Rick", "Password"));
+        testBalie.logIn(username, "Password");
         
         //fail tests
-        assertNotNull(testBalie.logIn("Kevin", "Bram"));
-        assertNotNull(testBalie.logIn("Rick", "Bram"));
-        assertNotNull(testBalie.logIn("", ""));
+        assertNull(testBalie.logIn("Kevin", "Bram"));
+        assertNull(testBalie.logIn("Rick", "Bram"));
+        assertNull(testBalie.logIn("", ""));
     }
     
 }

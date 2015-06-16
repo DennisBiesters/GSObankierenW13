@@ -58,7 +58,8 @@ public class Bank extends UnicastRemoteObject implements IBank{
         clients.add(klant);
         return klant;
     }
-
+    
+    @Override
     public synchronized boolean maakOver(int source, String destinationBank, int destination, Money money)
             throws NumberDoesntExistException {
         if (source == destination && this.name.equals(destinationBank)) {

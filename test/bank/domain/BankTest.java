@@ -9,6 +9,7 @@ import bank.bankieren.Bank;
 import bank.bankieren.IRekening;
 import bank.bankieren.Money;
 import fontys.util.NumberDoesntExistException;
+import java.rmi.RemoteException;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -21,8 +22,8 @@ public class BankTest {
     /**
      * Tests for the openRekening method
      */
-    @Test
-    public void testOpenRekening() {
+    @Test 
+    public void testOpenRekening() throws RemoteException {
         // setup
         Bank bank = new Bank("Rabobank");
 
@@ -44,7 +45,7 @@ public class BankTest {
      * Test for the getRekening method
      */
     @Test
-    public void testGetRekening() {
+    public void testGetRekening() throws RemoteException{
         // setup
         Bank bank = new Bank("ING");
         Integer nr = bank.openRekening("Henk", "Nutspeet");
@@ -63,47 +64,47 @@ public class BankTest {
      * Test for the maakOver method
      */
     @Test
-    public void testMaakOver() throws NumberDoesntExistException {
+    public void testMaakOver() throws NumberDoesntExistException, RemoteException {
         // setup
         Bank bank = new Bank("Tridios");
         Integer bron = bank.openRekening("Henk", "Zwolle");
         Integer bestemming = bank.openRekening("Fred", "America");
 
         // true tests
-        assertTrue(bank.maakOver(bron, bestemming, new Money(100, Money.EURO)));
+        assertTrue(bank.maakOver(bron,"Tridios", bestemming, new Money(100, Money.EURO)));
         
         // check if saldos are changed
-        assertEquals("-1,00", bank.getRekening(bron).getSaldo().getValue());
-        assertEquals("1,00", bank.getRekening(bestemming).getSaldo().getValue());
+        assertEquals("-1.00", bank.getRekening(bron).getSaldo().getValue());
+        assertEquals("1.00", bank.getRekening(bestemming).getSaldo().getValue());
         
         // false tests
-        assertFalse(bank.maakOver(bron, bestemming, new Money(1000000, Money.EURO)));       
+        assertFalse(bank.maakOver(bron,"Tridios", bestemming, new Money(1000000, Money.EURO)));       
         
         // check if saldos aren't changed
-        assertEquals("-1,00", bank.getRekening(bron).getSaldo().getValue());
-        assertEquals("1,00", bank.getRekening(bestemming).getSaldo().getValue());
+        assertEquals("-1.00", bank.getRekening(bron).getSaldo().getValue());
+        assertEquals("1.00", bank.getRekening(bestemming).getSaldo().getValue());
         
         // fail test if input is incorrect
         try {
-            bank.maakOver(bron, bron, new Money(1, Money.EURO));
+            bank.maakOver(bron,"Tridios", bron, new Money(1, Money.EURO));
             fail("money transferred to your own account");
         } catch (RuntimeException exc) {
         }
 
         try {
-            bank.maakOver(bron, bestemming, new Money(-1, Money.EURO));
+            bank.maakOver(bron,"Tridios", bestemming, new Money(-1, Money.EURO));
             fail("negative amount of money transferred");
         } catch (RuntimeException exc) {
         }
 
         try {
-            bank.maakOver(1, bestemming, new Money(1, Money.EURO));
+            bank.maakOver(1,"Tridios", bestemming, new Money(1, Money.EURO));
             fail("money transferred from not existing source");
         } catch (NumberDoesntExistException exc) {
         }
         
         try {
-            bank.maakOver(bron, 1, new Money(1, Money.EURO));
+            bank.maakOver(bron,"Tridios", 1, new Money(1, Money.EURO));
             fail("money transferred from not existing destination");
         } catch (NumberDoesntExistException exc) {
         }
@@ -113,7 +114,7 @@ public class BankTest {
      * Test for the getName method
      */
     @Test
-    public void testGetName() {
+    public void testGetName() throws RemoteException {
         // setup
         Bank bank = new Bank("ABN AMRO");
 
