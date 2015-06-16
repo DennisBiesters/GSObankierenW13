@@ -85,7 +85,7 @@ public class BalieServer extends Application {
              * create bank objects and rebind to registry RaboBank, ING, SNS,
              * ABN AMRO, ASN
              */
-            IBank rabo = new Bank("RaboBank");
+            Bank rabo = new Bank("RaboBank");
             IBank ing = new Bank("ING");
             IBank sns = new Bank("SNS");
             IBank abn = new Bank("ABN AMRO");

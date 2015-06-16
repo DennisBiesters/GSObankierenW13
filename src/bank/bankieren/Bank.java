@@ -4,30 +4,30 @@ import bank.centrale.ICentraleBank;
 import fontys.observer.BasicPublisher;
 import fontys.observer.RemotePropertyListener;
 import fontys.util.*;
-import java.io.Serializable;
 import java.net.UnknownHostException;
 import java.rmi.NotBoundException;
 
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class Bank implements IBank, Serializable{
+public class Bank extends UnicastRemoteObject implements IBank{
 
     /**
      *
      */
-    private transient static final long serialVersionUID = -8728841131739353765L;
+    private static final long serialVersionUID = -8728841131739353765L;
     private Map<Integer, IRekeningTbvBank> accounts;
-    private transient Collection<IKlant> clients;
-    private transient int nieuwReknr;
-    private transient String name;
-    private transient BasicPublisher pub;
+    private Collection<IKlant> clients;
+    private int nieuwReknr;
+    private String name;
+    private BasicPublisher pub;
 
-    public Bank(String name) {
+    public Bank(String name) throws RemoteException {
         accounts = new HashMap<Integer, IRekeningTbvBank>();
         clients = new ArrayList<IKlant>();
         nieuwReknr = 100000000;
