@@ -51,18 +51,18 @@ public class BankiersessieTest {
         Money geld = new Money(1, Money.EURO);
 
         //normal tests
-        assertTrue(testSessie.maakOver(100000001, geld));
+        assertTrue(testSessie.maakOver("Rabobank", 100000001, geld));
 
         //fail tests
         try {
-            testSessie.maakOver(100000000, geld);
+            testSessie.maakOver("Rabobank", 100000000, geld);
             fail("source and destination must be different");
         } catch (RuntimeException exc) {
         }
 
         try {
             Money negaGeld = new Money(-1, Money.EURO);
-            testSessie.maakOver(100000001, negaGeld);
+            testSessie.maakOver("Rabobank", 100000001, negaGeld);
             fail("amount must be positive");
         } catch (RuntimeException exc) {
         }
