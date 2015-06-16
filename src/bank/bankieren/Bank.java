@@ -24,7 +24,7 @@ public class Bank implements IBank, Serializable{
     private Map<Integer, IRekeningTbvBank> accounts;
     private transient Collection<IKlant> clients;
     private transient int nieuwReknr;
-    private String name;
+    private transient String name;
     private transient BasicPublisher pub;
 
     public Bank(String name) {

@@ -114,9 +114,13 @@ public class BankierSessieController implements Initializable {
                 String toBank = cbSelectBank.getSelectionModel().getSelectedItem().toString();
                 long centen = (long) (Double.parseDouble(tfAmount.getText()) * 100);
                 sessie.maakOver(toBank, to, new Money(centen, Money.EURO));
+                taMessage.setText("succesfully transfered " + tfAmount.getText() + " to " + toBank + " " + to);
             } catch (NullPointerException exc) {
                 taMessage.setText("please select a bank");
+            } catch (RuntimeException exc){
+                taMessage.setText(exc.getMessage());
             }
+            
         } catch (RemoteException e1) {
             e1.printStackTrace();
             taMessage.setText("verbinding verbroken");

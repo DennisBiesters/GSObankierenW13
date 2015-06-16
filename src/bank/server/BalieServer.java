@@ -6,6 +6,7 @@
 package bank.server;
 
 import bank.bankieren.Bank;
+import bank.bankieren.IBank;
 import bank.centrale.CentraleBank;
 import bank.centrale.ICentraleBank;
 import bank.gui.BankierClient;
@@ -84,11 +85,11 @@ public class BalieServer extends Application {
              * create bank objects and rebind to registry RaboBank, ING, SNS,
              * ABN AMRO, ASN
              */
-            Bank rabo = new Bank("RaboBank");
-            Bank ing = new Bank("ING");
-            Bank sns = new Bank("SNS");
-            Bank abn = new Bank("ABN AMRO");
-            Bank asn = new Bank("ASN");
+            IBank rabo = new Bank("RaboBank");
+            IBank ing = new Bank("ING");
+            IBank sns = new Bank("SNS");
+            IBank abn = new Bank("ABN AMRO");
+            IBank asn = new Bank("ASN");
 
             registry.rebind("RaboBank", rabo);
             registry.rebind("ING", ing);

@@ -43,7 +43,7 @@ public class Bankiersessie extends UnicastRemoteObject implements
 
         if (reknr == bestemming && bank.getName().equals(bestemmingBank)) {
             throw new RuntimeException(
-                    "source and destination must be different");
+                    "can't transfer money to your own account");
         }
         if (!bedrag.isPositive()) {
             throw new RuntimeException("amount must be positive");
