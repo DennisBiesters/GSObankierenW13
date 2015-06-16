@@ -98,10 +98,10 @@ public class BalieServer extends Application {
             registry.rebind("ASN", asn);
 
             IBalie balie = null;
-            
+
             // only for testing purpose
             balie = new Balie(rabo);
-                    System.out.println(balie.openRekening("Henk", "Helmond", "nope"));
+            System.out.println(balie.openRekening("Henk", "Helmond", "nope"));
 
             switch (nameBank) {
                 case "RaboBank":

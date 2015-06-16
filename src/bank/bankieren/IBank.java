@@ -3,55 +3,52 @@ package bank.bankieren;
 import fontys.observer.RemotePublisher;
 import fontys.util.*;
 import java.rmi.Remote;
+import java.rmi.RemoteException;
 
 /**
  * @author 871059
- * 
+ *
  */
 public interface IBank extends RemotePublisher, Remote {
 
     /**
-     * creatie van een nieuwe bankrekening met een identificerend rekeningnummer; 
-     * alleen als de klant, geidentificeerd door naam en plaats, nog niet bestaat 
-     * wordt er ook een nieuwe klant aangemaakt
-     * 
-     * @param naam
-     *            van de eigenaar van de nieuwe bankrekening
-     * @param plaats
-     *            de woonplaats van de eigenaar van de nieuwe bankrekening
-     * @return -1 zodra naam of plaats een lege string en anders het nummer van de
-     *         gecreeerde bankrekening
+     * creatie van een nieuwe bankrekening met een identificerend
+     * rekeningnummer; alleen als de klant, geidentificeerd door naam en plaats,
+     * nog niet bestaat wordt er ook een nieuwe klant aangemaakt
+     *
+     * @param naam van de eigenaar van de nieuwe bankrekening
+     * @param plaats de woonplaats van de eigenaar van de nieuwe bankrekening
+     * @return -1 zodra naam of plaats een lege string en anders het nummer van
+     * de gecreeerde bankrekening
      */
-    int openRekening(String naam, String plaats);
+    int openRekening(String naam, String plaats) throws RemoteException;
 
     /**
      * er wordt bedrag overgemaakt van de bankrekening met nummer bron naar de
      * bankrekening met nummer bestemming, mits het afschrijven van het bedrag
-     * van de rekening met nr bron niet lager wordt dan de kredietlimiet van deze
-     * rekening 
-     * 
+     * van de rekening met nr bron niet lager wordt dan de kredietlimiet van
+     * deze rekening
+     *
      * @param bron
-     * @param bestemmingBank
-     *            mag niet leeg of null zijn
-     * @param bestemming
-     *            ongelijk aan bron
-     * @param bedrag
-     *            is groter dan 0
+     * @param bestemmingBank mag niet leeg of null zijn
+     * @param bestemming ongelijk aan bron
+     * @param bedrag is groter dan 0
      * @return <b>true</b> als de overmaking is gelukt, anders <b>false</b>
-     * @throws NumberDoesntExistException
-     *             als een van de twee bankrekeningnummers onbekend is
+     * @throws NumberDoesntExistException als een van de twee
+     * bankrekeningnummers onbekend is
      */
     boolean maakOver(int bron, String bestemmingBank, int bestemming, Money bedrag)
-            throws NumberDoesntExistException;
+            throws NumberDoesntExistException, RemoteException;
 
     /**
      * @param nr
-     * @return de bankrekening met nummer nr mits bij deze bank bekend, anders null
+     * @return de bankrekening met nummer nr mits bij deze bank bekend, anders
+     * null
      */
-    IRekening getRekening(int nr);
+    IRekening getRekening(int nr) throws RemoteException;
 
     /**
      * @return de naam van deze bank
      */
-    String getName();
+    String getName() throws RemoteException;
 }
