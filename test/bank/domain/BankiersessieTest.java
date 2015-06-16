@@ -30,7 +30,7 @@ public class BankiersessieTest {
         Bank testBank = new Bank("Rabobank");
         Balie testBalie = new Balie(testBank);
         String name = testBalie.openRekening("Rick", "Eindhoven", "Password");
-        IBankiersessie testSessie = testBalie.logIn(name, "password");
+        IBankiersessie testSessie = testBalie.logIn(name, "Password");
 
         //normal tests
         assertTrue(testSessie.isGeldig());
@@ -47,7 +47,7 @@ public class BankiersessieTest {
         Balie testBalie = new Balie(testBank);
         String name = testBalie.openRekening("Rick", "Eindhoven", "Password");
         testBalie.openRekening("Dennis", "Geldrop", "Password");
-        IBankiersessie testSessie = testBalie.logIn(name, "password");
+        IBankiersessie testSessie = testBalie.logIn(name, "Password");
         Money geld = new Money(1, Money.EURO);
 
         //normal tests
@@ -76,10 +76,12 @@ public class BankiersessieTest {
         Bank testBank = new Bank("Rabobank");
         Balie testBalie = new Balie(testBank);
         String name = testBalie.openRekening("Rick", "Eindhoven", "Password");
-        IBankiersessie testSessie = testBalie.logIn(name, "password");
-
+        IBankiersessie testSessie = testBalie.logIn(name, "Password");
+        
         //normal tests
-        assertEquals(100000000, testSessie.getRekening());
+        IRekening test = testSessie.getRekening();
+        assertEquals(100000000, test.getNr());
+        assertEquals("100000000: Rick te plaats", test.toString());
     }
 
     @Test
@@ -89,13 +91,13 @@ public class BankiersessieTest {
         Bank testBank = new Bank("Rabobank");
         Balie testBalie = new Balie(testBank);
         String name = testBalie.openRekening("Rick", "Eindhoven", "Password");
-        IBankiersessie testSessie = testBalie.logIn(name, "password");
+        IBankiersessie testSessie = testBalie.logIn(name, "Password");
 
         //normal test
         try {
             testSessie.logUit();
             testSessie.getRekening();
-            fail("you should be logged out");
+            fail("Je bent niet uitgelogt");
         } catch (RemoteException | InvalidSessionException exc) {
         }
 

@@ -2,6 +2,11 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/C:/Users/rick/Documents/GitHub/GSObankierenW13/test/bank/domain/BankTest.java</file>
+            <file>file:/C:/Users/rick/Documents/GitHub/GSObankierenW13/test/bank/domain/BalieTest.java</file>
+            <file>file:/C:/Users/rick/Documents/GitHub/GSObankierenW13/test/bank/domain/BankiersessieTest.java</file>
+            <file>file:/C:/Users/rick/Documents/GitHub/GSObankierenW13/src/bank/server/BalieServer.java</file>
+        </group>
     </open-files>
 </project-private>
