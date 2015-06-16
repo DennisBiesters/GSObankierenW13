@@ -1,11 +1,12 @@
 package bank.bankieren;
 
-import java.io.Serializable;
+import fontys.observer.RemotePublisher;
+import java.rmi.RemoteException;
 
-public interface IRekening extends Serializable {
-  int getNr();
-  Money getSaldo();
-  IKlant getEigenaar();
-  int getKredietLimietInCenten();
+public interface IRekening extends RemotePublisher {
+  int getNr() throws RemoteException;
+  Money getSaldo() throws RemoteException;
+  IKlant getEigenaar() throws RemoteException;
+  int getKredietLimietInCenten() throws RemoteException;
 }
 

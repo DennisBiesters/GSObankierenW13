@@ -1,8 +1,6 @@
 package bank.bankieren;
 
 import bank.centrale.ICentraleBank;
-import fontys.observer.BasicPublisher;
-import fontys.observer.RemotePropertyListener;
 import fontys.util.*;
 import java.net.UnknownHostException;
 import java.rmi.NotBoundException;
@@ -25,14 +23,12 @@ public class Bank extends UnicastRemoteObject implements IBank{
     private Collection<IKlant> clients;
     private int nieuwReknr;
     private String name;
-    private BasicPublisher pub;
 
     public Bank(String name) throws RemoteException {
         accounts = new HashMap<Integer, IRekeningTbvBank>();
         clients = new ArrayList<IKlant>();
         nieuwReknr = 100000000;
         this.name = name;
-        this.pub = new BasicPublisher(new String[]{"banksaldo"});
     }
 
     public int openRekening(String name, String city) {
@@ -41,7 +37,12 @@ public class Bank extends UnicastRemoteObject implements IBank{
         }
 
         IKlant klant = getKlant(name, city);
-        IRekeningTbvBank account = new Rekening(nieuwReknr, klant, Money.EURO);
+        IRekeningTbvBank account = null;
+        try {
+            account = new Rekening(nieuwReknr, klant, Money.EURO);
+        } catch (RemoteException ex) {
+            Logger.getLogger(Bank.class.getName()).log(Level.SEVERE, null, ex);
+        }
         accounts.put(nieuwReknr, account);
         nieuwReknr++;
         return nieuwReknr - 1;
@@ -58,10 +59,6 @@ public class Bank extends UnicastRemoteObject implements IBank{
         return klant;
     }
 
-    public IRekening getRekening(int nr) {
-        return accounts.get(nr);
-    }
-
     public synchronized boolean maakOver(int source, String destinationBank, int destination, Money money)
             throws NumberDoesntExistException {
         if (source == destination && this.name.equals(destinationBank)) {
@@ -72,7 +69,12 @@ public class Bank extends UnicastRemoteObject implements IBank{
             throw new RuntimeException("money must be positive");
         }
 
-        IRekeningTbvBank source_account = (IRekeningTbvBank) getRekening(source);
+        IRekeningTbvBank source_account = null;
+        try {
+            source_account = (IRekeningTbvBank) getRekening(source);
+        } catch (RemoteException ex) {
+            Logger.getLogger(Bank.class.getName()).log(Level.SEVERE, null, ex);
+        }
         if (source_account == null) {
             throw new NumberDoesntExistException("account " + source
                     + " unknown at " + name);
@@ -81,8 +83,13 @@ public class Bank extends UnicastRemoteObject implements IBank{
         Money negative = Money.difference(new Money(0, money.getCurrency()),
                 money);
 
-        Money oldSaldo = source_account.getSaldo();
-        boolean success = source_account.muteer(negative);
+        boolean success = false;
+        try {
+            success = source_account.muteer(negative);
+        } catch (RemoteException ex) {
+            Logger.getLogger(Bank.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         if (!success) {
             return false;
         }
@@ -90,14 +97,22 @@ public class Bank extends UnicastRemoteObject implements IBank{
         IRekeningTbvBank dest_account = null;
 
         if (this.name.equals(destinationBank)) {
-            dest_account = (IRekeningTbvBank) getRekening(destination);
+            try {
+                dest_account = (IRekeningTbvBank) getRekening(destination);
+            } catch (RemoteException ex) {
+                Logger.getLogger(Bank.class.getName()).log(Level.SEVERE, null, ex);
+            }
 
             if (dest_account == null) {
                 throw new NumberDoesntExistException("account " + destination
                         + " unknown at " + name);
             }
 
-            success = dest_account.muteer(money);
+            try {
+                success = dest_account.muteer(money);
+            } catch (RemoteException ex) {
+                Logger.getLogger(Bank.class.getName()).log(Level.SEVERE, null, ex);
+            }
         } else {
             //centrale bank: bank opzoeken, rekening opzoeken, muteer
             String address;
@@ -114,9 +129,11 @@ public class Bank extends UnicastRemoteObject implements IBank{
 
         if (!success) // rollback
         {
-            source_account.muteer(money);
-        } else {
-            pub.inform(this, "banksaldo", oldSaldo.toString(), source_account.getSaldo().toString());
+            try {
+                source_account.muteer(money);
+            } catch (RemoteException ex) {
+                Logger.getLogger(Bank.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
 
         return success;
@@ -128,13 +145,18 @@ public class Bank extends UnicastRemoteObject implements IBank{
     }
 
     @Override
-    public void addListener(RemotePropertyListener rl, String string) throws RemoteException {
-        pub.addListener(rl, string);
+    public boolean muteer(int destination, Money money) throws RemoteException {
+        IRekeningTbvBank rekening = getRekening(destination);
+        
+        if(rekening == null){
+            return false;
+        }
+        
+        return rekening.muteer(money);
     }
 
     @Override
-    public void removeListener(RemotePropertyListener rl, String string) throws RemoteException {
-        pub.removeListener(rl, string);
+    public IRekeningTbvBank getRekening(int nr) throws RemoteException {
+       return accounts.get(nr);
     }
-
 }

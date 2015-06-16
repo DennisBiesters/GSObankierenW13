@@ -7,6 +7,7 @@ package bank.centrale;
 
 import bank.bankieren.Money;
 import java.rmi.Remote;
+import java.rmi.RemoteException;
 
 /**
  *
@@ -20,5 +21,5 @@ public interface ICentraleBank extends Remote{
      * @param money the amount of money that has to be transfered
      * @return 
      */
-    public boolean maakOver(String destinationBank, int destination, Money money);
+    public boolean maakOver(String destinationBank, int destination, Money money) throws RemoteException;
 }

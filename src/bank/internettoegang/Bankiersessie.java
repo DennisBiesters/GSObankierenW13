@@ -26,8 +26,8 @@ public class Bankiersessie extends UnicastRemoteObject implements
         laatsteAanroep = System.currentTimeMillis();
         this.reknr = reknr;
         this.bank = bank;
-        this.pub = new BasicPublisher(new String[]{"sessiesaldo"});
-        bank.addListener(this, "banksaldo");
+        this.pub = new BasicPublisher(new String[]{"sessiesaldo"});      
+        bank.getRekening(reknr).addListener(this, "rekeningsaldo");
     }
 
     public boolean isGeldig() {

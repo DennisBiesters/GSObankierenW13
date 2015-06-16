@@ -1,5 +1,7 @@
 package bank.bankieren;
 
+import java.rmi.RemoteException;
+
 public interface IRekeningTbvBank extends IRekening {
 	/**
 	 * het saldo van deze bankrekening wordt met bedrag aangepast, tenzij het
@@ -9,7 +11,5 @@ public interface IRekeningTbvBank extends IRekening {
 	 *            is ongelijk aan 0
 	 * @return (saldo + bedrag) >= -(maximaal krediet)
 	 */
-	boolean muteer(Money bedrag);
-	
-
+	boolean muteer(Money bedrag) throws RemoteException;
 }

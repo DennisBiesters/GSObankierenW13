@@ -42,7 +42,7 @@ public class BankSelectController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
-        cbSelectBank.getItems().addAll(FXCollections.observableArrayList("RaboBank", "ING", "SNS", "ABN AMRO", "ASN"));
+        cbSelectBank.getItems().addAll(FXCollections.observableArrayList("RaboBank", "ING", "SNS", "ABN", "ASN"));
         cbSelectBank.valueProperty().addListener(new ChangeListener() {
             @Override
             public void changed(ObservableValue ov, Object t, Object t1) {

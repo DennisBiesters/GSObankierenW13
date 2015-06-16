@@ -9,7 +9,7 @@ import java.rmi.RemoteException;
  * @author 871059
  *
  */
-public interface IBank extends RemotePublisher, Remote {
+public interface IBank extends Remote {
 
     /**
      * creatie van een nieuwe bankrekening met een identificerend
@@ -39,16 +39,26 @@ public interface IBank extends RemotePublisher, Remote {
      */
     boolean maakOver(int bron, String bestemmingBank, int bestemming, Money bedrag)
             throws NumberDoesntExistException, RemoteException;
-
+    
     /**
-     * @param nr
-     * @return de bankrekening met nummer nr mits bij deze bank bekend, anders
-     * null
+     * Muteer
+     * @param destination rekening to muteer
+     * @param money amount of money to muteer
+     * @return true if succesfull, else false
+     * @throws RemoteException 
      */
-    IRekening getRekening(int nr) throws RemoteException;
+    boolean muteer(int destination, Money money) throws RemoteException;
 
     /**
      * @return de naam van deze bank
      */
     String getName() throws RemoteException;
+    
+    /**
+     * 
+     * @param nr
+     * @return
+     * @throws RemoteException 
+     */
+    IRekeningTbvBank getRekening(int nr) throws RemoteException;
 }

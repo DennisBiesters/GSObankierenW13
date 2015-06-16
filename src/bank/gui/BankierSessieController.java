@@ -73,7 +73,7 @@ public class BankierSessieController implements Initializable {
                     + rekening.getEigenaar().getPlaats();
             tfNameCity.setText(eigenaar);
             sessie.addListener(new BankierSessieControllerListener(this), "sessiesaldo");
-            cbSelectBank.getItems().addAll(FXCollections.observableArrayList("RaboBank", "ING", "SNS", "ABN AMRO", "ASN"));
+            cbSelectBank.getItems().addAll(FXCollections.observableArrayList("RaboBank", "ING", "SNS", "ABN", "ASN"));
         } catch (InvalidSessionException ex) {
             taMessage.setText("bankiersessie is verlopen");
             Logger.getLogger(BankierSessieController.class.getName()).log(Level.SEVERE, null, ex);
@@ -113,8 +113,9 @@ public class BankierSessieController implements Initializable {
             try {
                 String toBank = cbSelectBank.getSelectionModel().getSelectedItem().toString();
                 long centen = (long) (Double.parseDouble(tfAmount.getText()) * 100);
-                sessie.maakOver(toBank, to, new Money(centen, Money.EURO));
-                taMessage.setText("succesfully transfered " + tfAmount.getText() + " to " + toBank + " " + to);
+                if(sessie.maakOver(toBank, to, new Money(centen, Money.EURO))){
+                    taMessage.setText("succesfully transfered " + tfAmount.getText() + " to " + toBank + " " + to);
+                }
             } catch (NullPointerException exc) {
                 taMessage.setText("please select a bank");
             } catch (RuntimeException exc){

@@ -15,7 +15,6 @@ import bank.internettoegang.IBalie;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -66,42 +65,71 @@ public class BalieServer extends Application {
             String address = java.net.InetAddress.getLocalHost().getHostAddress();
             int port = 1099;
             Properties props = new Properties();
-            String rmiBalie = address + ":" + port + "/" + nameBank;
+            String rmiBalie = address + ":" + port + "/" + "RaboBank";
             props.setProperty("balie", rmiBalie);
-            out = new FileOutputStream(nameBank + ".props");
+            out = new FileOutputStream("RaboBank" + ".props");
             props.store(out, null);
+            
+            props = new Properties();
+            props.setProperty("balie", address + ":" + port + "/" + "ING");
+            out = new FileOutputStream("ING" + ".props");
+            props.store(out, null);
+            
+            props = new Properties();
+            props.setProperty("balie", address + ":" + port + "/" + "SNS");
+            out = new FileOutputStream("SNS" + ".props");
+            props.store(out, null);
+            
+            props = new Properties();
+            props.setProperty("balie", address + ":" + port + "/" + "ABN AMRO");
+            out = new FileOutputStream("ABN AMRO" + ".props");
+            props.store(out, null);
+            
+            props = new Properties();
+            props.setProperty("balie", address + ":" + port + "/" + "ASN");
+            out = new FileOutputStream("ASN" + ".props");
+            props.store(out, null);          
             out.close();
             /**
              * create balie registry
              */
-            java.rmi.registry.LocateRegistry.createRegistry(port);
-
+            Registry balieRegistry = LocateRegistry.createRegistry(port);
+            //java.rmi.registry.LocateRegistry.createRegistry(port);
             /**
              * create bank registry
              */
-            Registry registry = LocateRegistry.createRegistry(1098);
+            Registry bankRegistry = LocateRegistry.createRegistry(1098);
 
             /**
              * create bank objects and rebind to registry RaboBank, ING, SNS,
              * ABN AMRO, ASN
              */
-            Bank rabo = new Bank("RaboBank");
+            IBank rabo = new Bank("RaboBank");
             IBank ing = new Bank("ING");
             IBank sns = new Bank("SNS");
-            IBank abn = new Bank("ABN AMRO");
+            IBank abn = new Bank("ABN");
             IBank asn = new Bank("ASN");
 
-            registry.rebind("RaboBank", rabo);
-            registry.rebind("ING", ing);
-            registry.rebind("SNS", sns);
-            registry.rebind("ABN AMRO", abn);
-            registry.rebind("ASN", asn);
+            bankRegistry.rebind("RaboBank", rabo);
+            bankRegistry.rebind("ING", ing);
+            bankRegistry.rebind("SNS", sns);
+            bankRegistry.rebind("ABN", abn);
+            bankRegistry.rebind("ASN", asn);
 
             IBalie balie = null;
 
             // only for testing purpose
             balie = new Balie(rabo);
-            System.out.println(balie.openRekening("Henk", "Helmond", "nope"));
+            //System.out.println(balie.openRekening("Henk", "Helmond", "nope"));
+            balieRegistry.rebind("RaboBank", balie);
+            balie = new Balie(ing);
+            balieRegistry.rebind("ING", balie);
+            balie = new Balie(sns);
+            balieRegistry.rebind("SNS", balie);
+            balie = new Balie(abn);
+            balieRegistry.rebind("ABN AMRO", balie);
+            balie = new Balie(asn);
+            balieRegistry.rebind("ASN", balie);
 
             switch (nameBank) {
                 case "RaboBank":
@@ -123,8 +151,8 @@ public class BalieServer extends Application {
 
             try {
                 ICentraleBank centraleBank = new CentraleBank();
-                registry = LocateRegistry.createRegistry(1097);
-                registry.rebind("cb", centraleBank);
+                Registry centraleRegistry = LocateRegistry.createRegistry(1097);
+                centraleRegistry.rebind("cb", centraleBank);
             } catch (RemoteException ex) {
                 Logger.getLogger(CentraleBank.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -134,10 +162,10 @@ public class BalieServer extends Application {
             }
 
             // only for testing purpose
-            System.out.println(balie.openRekening("Dennis", "Geldrop", "test"));
-            System.out.println(balie.openRekening("Rick", "Eindhoven", "nein"));
+            //System.out.println(balie.openRekening("Dennis", "Geldrop", "test"));
+            //System.out.println(balie.openRekening("Rick", "Eindhoven", "nein"));
 
-            Naming.rebind(nameBank, balie);
+            balieRegistry.rebind(nameBank, balie);
 
             return true;
 
