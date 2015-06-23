@@ -90,11 +90,12 @@ public class BalieServer extends Application {
             out = new FileOutputStream("ASN" + ".props");
             props.store(out, null);          
             out.close();
+            
             /**
              * create balie registry
              */
             Registry balieRegistry = LocateRegistry.createRegistry(port);
-            //java.rmi.registry.LocateRegistry.createRegistry(port);
+            
             /**
              * create bank registry
              */

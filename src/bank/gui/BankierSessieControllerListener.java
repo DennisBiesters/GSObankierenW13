@@ -5,7 +5,6 @@
  */
 package bank.gui;
 
-import bank.bankieren.Money;
 import fontys.observer.RemotePropertyListener;
 import java.beans.PropertyChangeEvent;
 import java.rmi.RemoteException;

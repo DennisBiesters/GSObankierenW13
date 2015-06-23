@@ -9,10 +9,8 @@ import bank.bankieren.IRekening;
 import bank.bankieren.Money;
 import bank.internettoegang.IBalie;
 import bank.internettoegang.IBankiersessie;
-import fontys.observer.RemotePropertyListener;
 import fontys.util.InvalidSessionException;
 import fontys.util.NumberDoesntExistException;
-import java.beans.PropertyChangeEvent;
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.ResourceBundle;
@@ -106,9 +104,6 @@ public class BankierSessieController implements Initializable {
         try {
             int from = Integer.parseInt(tfAccountNr.getText());
             int to = Integer.parseInt(tfToAccountNr.getText());
-//            if (from == to) {
-//                taMessage.setText("can't transfer money to your own account");
-//            }
 
             try {
                 String toBank = cbSelectBank.getSelectionModel().getSelectedItem().toString();

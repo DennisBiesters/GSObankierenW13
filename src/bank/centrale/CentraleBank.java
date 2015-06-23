@@ -38,17 +38,7 @@ public class CentraleBank extends UnicastRemoteObject implements ICentraleBank{
             Registry registry = LocateRegistry.getRegistry(address, 1098);
             foundBank = (IBank) registry.lookup(destinationBank);
                       
-            //foundRekening = (IRekeningTbvBank) foundBank.getRekening(destination);
             return foundBank.muteer(destination, money);
-            
-//            /**
-//             * check if rekening exists
-//             */
-//            if(foundRekening == null){
-//                return false;
-//            }
-            
-            //return foundRekening.muteer(money);
                      
         } catch (UnknownHostException | RemoteException | NotBoundException ex) {
             Logger.getLogger(CentraleBank.class.getName()).log(Level.SEVERE, null, ex);
